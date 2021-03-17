@@ -1,12 +1,11 @@
-import React from "react";
 import ReactDOM from "react-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
+import React from "react";
 
-const client = new QueryClient();
-ReactDOM.render(
-  <QueryClientProvider client={client}>
-    <App />
-  </QueryClientProvider>,
-  document.getElementById("root")
-);
+function index() {
+  return <div></div>;
+}
+
+export default index;
+
+ReactDOM.render(<App />, document.getElementById("root"));

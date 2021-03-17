@@ -1,54 +1,31 @@
+import React from "react";
+import { TodoListItem } from "./TodoListItem";
 import { useState } from "react";
-import { useQuery } from "react-query";
-// Components
-import Item from "./components/item";
-import Drawer from "@material-ui/core/Drawer";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Grid from "@material-ui/core/Grid";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import Badge from "@material-ui/core/Badge";
-//styles
-import { Wrapper } from "./App.styles";
-//Types
-export type CartItemType = {
-  id: number;
-  category: string;
-  description: string;
-  image: string;
-  price: number;
-  title: string;
-  amount: number;
-};
 
-const getProducts = async (): Promise<CartItemType[]> =>
-  await (await fetch("https://fakestoreapi.com/products")).json();
+const initialTodos: Array<Todo> = [
+  { text: "walk the dog", complete: true },
+  { text: "write app", complete: false },
+];
+const App: React.FC = () => {
+  const [todos, setTodos] = useState(initialTodos);
 
-const App = () => {
-  const { data, isLoading, error } = useQuery<CartItemType[]>(
-    "products",
-    getProducts
-  );
-  console.log(data);
-
-  const getTotalItems = () => null;
-
-  const handleAddToCart = (clickedItem: CartItemType) => null;
-
-  const handleRemoveFromCart = () => null;
-
-  if (isLoading) return <LinearProgress />;
-  if (error) return <div>Something went wrong...</div>;
-
+  const toggleTodo = (selectedTodo: Todo) => {
+    const newTodos = todos.map((todo) => {
+      if (todo === selectedTodo) {
+        return {
+          ...todo,
+          complete: !todo.complete,
+        };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+  };
   return (
-    <Wrapper>
-      <Grid container spacing={3}>
-        {data?.map((item) => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
-    </Wrapper>
+    <React.Fragment>
+      <TodoListItem todo={todos[0]} toggleTodo={toggleTodo} />
+      <TodoListItem todo={todos[1]} toggleTodo={toggleTodo} />
+    </React.Fragment>
   );
 };
 
